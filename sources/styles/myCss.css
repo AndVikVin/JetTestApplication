@@ -1,0 +1,24 @@
+.detName {
+    padding:15px;
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.detInfo {
+    margin:35px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.detInfo span {
+    display: inline-block;
+    margin:18px;
+    font-size:16px;
+}
+
+.contact {
+    display:inline-block;
+    margin-left:10px;
+}
+
