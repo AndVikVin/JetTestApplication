@@ -27,7 +27,7 @@ export class PopupWin extends JetView {
 							{view:"datepicker", label:"Time", type:"time", name:"Time"}
 						]
 					},
-					{view:"checkbox", label:"Complited"},
+					{view:"checkbox", label:"Complited", name:"State"},
 					{
 						cols:[
 							{},

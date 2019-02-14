@@ -18,6 +18,7 @@ class ContactInfo extends JetView{
 						[
 							{view:"button",label:"Delete", type:"iconButton", icon:"far fa-trash-alt", width:140},
 							{view:"button",label:"Edit", type:"iconButton", icon:"far fa-edit", width:140, click:()=>{
+								this.getParentView().show("./contactForm");
 							}},
 						]
 					},
