@@ -7,10 +7,11 @@ class ActivityTable extends JetView{
 	config(){
 		const activityTable = {
 			view:"datatable",
+			localId:"activityTable",
 			columns:[
 				{id:"State",header:"", template:"{common.checkbox()}", checkValue:"Open", unCheckValue:"Close"},
 				{id:"TypeID",header:["Activity Type", {content:"selectFilter"}], adjust:"data", collection:activityType, sort:"string",fillspace:true},
-				{id:"DueDate",header:["Due Date",{content:"datepickerFilter"}], adjust:"data",format:webix.Date.dateToStr("%d-%m-%Y %H:%i"), sort:"date",fillspace:true},
+				{id:"DueDate",header:["Due Date",{content:"datepickerFilter", inputConfig:{ timepicker:true }}], adjust:"data",format:webix.Date.dateToStr("%d-%m-%Y %H:%i"), sort:"date",fillspace:true},
 				{id:"Details",header:["Details",{content:"textFilter"}], adjust:"data", sort:"string",fillspace:true},
 				{id:"ContactID",header:["Contact",{content:"selectFilter"}], adjust:"data", collection:contactsCollServ,sort:"string",fillspace:true},
 				{id:"edit",header:"",template:"{common.editIcon()}"},
@@ -31,10 +32,11 @@ class ActivityTable extends JetView{
 							}
 						}
 					});
+					return false;
 				},
 				"wxi-pencil":function(e,id){
 					const obj = activities.getItem(id);
-					this.$scope.PopupWinEdit.showPopup(obj);
+					this.$scope.PopupWin.showPopup(obj);
 				}
 			}
 		};
@@ -46,7 +48,7 @@ class ActivityTable extends JetView{
 			value:"Add activity",
 			align:"right",
 			click:()=>{
-				this.PopupWinAdd.showPopup();
+				this.PopupWin.showPopup();
 			}
 		};
 
@@ -57,13 +59,10 @@ class ActivityTable extends JetView{
 			]
 		};
 	}
-	init(view){
-		const PopupWinAdd = new PopupWin(this.app,"","Add",contactsCollServ,activityType,"Add");
-		const PopupWinEdit = new PopupWin(this.app,"","Edit",contactsCollServ,activityType,"Save");
-		this.PopupWinAdd = this.ui(PopupWinAdd);
-		this.PopupWinEdit = this.ui(PopupWinEdit);
+	init(){
+		this.PopupWin= this.ui(PopupWin);
 		activities.waitData.then(()=>{
-			view.queryView("datatable").sync(activities);
+			this.$$("activityTable").sync(activities);
 		});
 	}
 }
