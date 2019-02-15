@@ -26,8 +26,8 @@ class Contacts extends JetView{
 		
 		};
 	}
-	init(view){
-		view.queryView("list").parse(contactsCollServ);
+	init(){
+		this.$$("usersList").parse(contactsCollServ);
 	}
 	urlChange(){
 		contactsCollServ.waitData.then(()=>{
