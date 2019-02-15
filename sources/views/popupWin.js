@@ -1,14 +1,9 @@
 import {JetView} from "webix-jet";
 import {activities} from "../models/activities";
+import {activityType} from "../models/activities";
+import {contactsCollServ} from "../models/contacts";
 
 export class PopupWin extends JetView {
-	constructor(app,name,buttonValue, contacts, typeActivity, action){
-		super(app,name);
-		this._buttonValue = buttonValue;
-		this._contacts = contacts;
-		this._typeActivity = typeActivity;
-		this._action = action;
-	}
 	config(){
 		return {
 			view:"popup",
@@ -17,10 +12,10 @@ export class PopupWin extends JetView {
 				view:"form",
 				localId:"form",
 				elements:[
-					{type:"header",template:this._buttonValue + " " + "activity"},
+					{type:"header", localId:"formHeader", template:"Add activity"},
 					{view:"text", label:"Details", height:100, name:"Details", invalidMessage:"Can't be empty"},
-					{view:"richselect", label:"Type", options:this._typeActivity, name:"TypeID", invalidMessage:"Can't be empty"},
-					{view:"richselect", label:"Contact", options:this._contacts, name:"ContactID", invalidMessage:"Can't be empty"},
+					{view:"richselect", label:"Type", options:activityType, name:"TypeID", invalidMessage:"Can't be empty"},
+					{view:"richselect", label:"Contact", options:contactsCollServ, name:"ContactID", invalidMessage:"Can't be empty"},
 					{
 						cols:[
 							{view:"datepicker", label:"Date", name:"Date", format: webix.Date.dateToStr("%d-%m-%Y")},
@@ -31,7 +26,7 @@ export class PopupWin extends JetView {
 					{
 						cols:[
 							{},
-							{view:"button",label:this._action, width:100, click:()=>{
+							{view:"button", localId:"addButton", width:100, click:()=>{
 								const newValues = this.$$("form").getValues();
 								const formatDate = webix.Date.dateToStr("%d-%m-%Y");
 								const formateTime = webix.Date.dateToStr("%H:%i");
@@ -40,7 +35,7 @@ export class PopupWin extends JetView {
 								delete newValues.Date;
 								delete newValues.Time;
 								if(this.$$("form").validate()){
-									if(this._action === "Save"){
+									if(this.$$("addButton").getValue() === "Save"){
 										const id = newValues.id;
 										activities.updateItem(id,newValues);
 									} else {
@@ -70,9 +65,14 @@ export class PopupWin extends JetView {
 	}
 	showPopup(obj){
 		if(obj){
+			this.$$("formHeader").setHTML("<div>Edit activity</div>");
+			this.$$("addButton").setValue("Save");
 			obj.Date = obj.DueDate;
 			obj.Time = obj.DueDate;
 			this.$$("form").setValues(obj);
+		} else {
+			this.$$("formHeader").setHTML("<div>Add activity</div>");
+			this.$$("addButton").setValue("Add");
 		}
 		this.getRoot().show();
 	}
