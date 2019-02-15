@@ -23,11 +23,11 @@ export class PopupWin extends JetView {
 					{view:"richselect", label:"Contact", options:this._contacts, name:"ContactID", invalidMessage:"Can't be empty"},
 					{
 						cols:[
-							{view:"datepicker", label:"Date", name:"Date"},
-							{view:"datepicker", label:"Time", type:"time", name:"Time"}
+							{view:"datepicker", label:"Date", name:"Date", format: webix.Date.dateToStr("%d-%m-%Y")},
+							{view:"datepicker", label:"Time", type:"time", name:"Time", format:webix.Date.dateToStr("%H:%i")}
 						]
 					},
-					{view:"checkbox", label:"Complited"},
+					{view:"checkbox", label:"Complited", checkValue:"Open", unCheckValue:"Close"},
 					{
 						cols:[
 							{},
@@ -37,6 +37,8 @@ export class PopupWin extends JetView {
 								const formateTime = webix.Date.dateToStr("%H:%i");
 								const currentDate = formatDate(newValues.Date) + " " + formateTime(newValues.Time);
 								newValues.DueDate = currentDate;
+								delete newValues.Date;
+								delete newValues.Time;
 								if(this.$$("form").validate()){
 									if(this._action === "Save"){
 										const id = newValues.id;
