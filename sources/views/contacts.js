@@ -33,7 +33,6 @@ class Contacts extends JetView{
 		contactsCollServ.waitData.then(()=>{
 			const list = this.$$("usersList");
 			let id = this.getParam("id");
-	
 			id = id || list.getFirstId();
 			if(id && list.exists(id))
 				list.select(id);

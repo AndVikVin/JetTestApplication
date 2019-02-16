@@ -33,7 +33,7 @@ class ContactInfo extends JetView{
 			statuses.waitData
 		]).then(()=>{
 			const id = this.getParam("id");
-			if(id & contactsCollServ.exists(id)){
+			if(id && contactsCollServ.exists(id)){
 				const currentItem = webix.copy(contactsCollServ.getItem(id));
 				if(currentItem.StatusID){
 					currentItem.Value = statuses.getItem(currentItem.StatusID).Value;
