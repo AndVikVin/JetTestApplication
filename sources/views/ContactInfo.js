@@ -33,11 +33,12 @@ class ContactInfo extends JetView{
 			statuses.waitData
 		]).then(()=>{
 			const id = this.getParam("id");
-			const values = contactsCollServ.getItem(id);
-			const currentItem = webix.copy(values);
-			if(currentItem.StatusID){
-				currentItem.Value = statuses.getItem(values.StatusID).Value;
-				this.$$("detaileInfo").parse(currentItem);
+			if(id & contactsCollServ.exists(id)){
+				const currentItem = webix.copy(contactsCollServ.getItem(id));
+				if(currentItem.StatusID){
+					currentItem.Value = statuses.getItem(currentItem.StatusID).Value;
+					this.$$("detaileInfo").parse(currentItem);
+				}
 			}
 		});
 	}

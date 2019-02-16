@@ -18,7 +18,7 @@ export class PopupWin extends JetView {
 					{view:"richselect", label:"Contact", options:contactsCollServ, name:"ContactID", invalidMessage:"Can't be empty"},
 					{
 						cols:[
-							{view:"datepicker", label:"Date", name:"Date", format: webix.Date.dateToStr("%d-%m-%Y")},
+							{view:"datepicker", label:"Date", name:"Date", format: webix.Date.dateToStr("%d-%m-%Y"),invalidMessage:"Can't be empty"},
 							{view:"datepicker", label:"Time", type:"time", name:"Time", format:webix.Date.dateToStr("%H:%i")}
 						]
 					},
@@ -28,12 +28,12 @@ export class PopupWin extends JetView {
 							{},
 							{view:"button", localId:"addButton", width:100, click:()=>{
 								const newValues = this.$$("form").getValues();
-								const formatDate = webix.Date.dateToStr("%d-%m-%Y");
-								const formateTime = webix.Date.dateToStr("%H:%i");
-								const currentDate = formatDate(newValues.Date) + " " + formateTime(newValues.Time);
-								newValues.DueDate = currentDate;
-								delete newValues.Date;
-								delete newValues.Time;
+								if(newValues.Date & newValues.Time){
+									newValues.Date.setHours(newValues.Time.getHours(),newValues.Time.getMinutes());
+									newValues.DueDate = newValues.Date;
+									delete newValues.Date;
+									delete newValues.Time;
+								}
 								if(this.$$("form").validate()){
 									if(this.$$("addButton").getValue() === "Save"){
 										const id = newValues.id;
@@ -41,15 +41,11 @@ export class PopupWin extends JetView {
 									} else {
 										activities.add(newValues);
 									}
-									this.$$("form").clear();
-									this.$$("form").clearValidation();
-									this.getRoot().hide();
+									this.claerAll();
 								}
 							}},
 							{view:"button",label:"Cancel", width:100,click:()=>{
-								this.$$("form").clear();
-								this.$$("form").clearValidation();
-								this.getRoot().hide();
+								this.claerAll();
 							}
 							}
 						]
@@ -59,9 +55,15 @@ export class PopupWin extends JetView {
 					Details:webix.rules.isNotEmpty,
 					TypeID: webix.rules.isNotEmpty,
 					ContactID: webix.rules.isNotEmpty,
+					Date: webix.rules.isNotEmpty		
 				}
 			}
 		};
+	}
+	claerAll(){
+		this.$$("form").clear();
+		this.$$("form").clearValidation();
+		this.getRoot().hide();
 	}
 	showPopup(obj){
 		if(obj){
