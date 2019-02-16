@@ -1,10 +1,12 @@
-import {JetView} from "webix-jet";
+import {JetView, plugins} from "webix-jet";
+
 
 class Top extends JetView{
 	config(){
 		const menu = {
 			view:"menu", id:"top:menu",
 			name:"menu", 
+			localId:"topMenu",
 			css:"app_menu",
 			width:180, layout:"y", select:true,
 			template:"<span class='webix_icon #icon#'></span> #value# ",
@@ -14,14 +16,16 @@ class Top extends JetView{
 				{ value:"Settings", id:"settings",  icon:"wxi-alert" }				
 			],
 			on:{
-				onAfterSelect:(id)=>{
-					this.app.show("/top/" + id);
+				onAfterSelect:()=>{
+					const currentItem = this.$$("topMenu").getSelectedItem();
+					this.$$("header").setHTML("<div>" + currentItem["value"] + "</div>");
 				}
 			}
 		};
 		const header = {
 			view:"template",
-			type:"header"
+			type:"header",
+			localId:"header"
 		};
 		return {
 			rows:[
@@ -35,14 +39,8 @@ class Top extends JetView{
 			]
 		};
 	}
-
-	urlChange(view,url){
-		const menu = view.queryView("menu");
-		menu.select(url[1]["page"]);
-		const header = view.queryView("template");
-		const currentItem = menu.getSelectedItem();
-		header.define("template",currentItem["value"]);
-		header.refresh();
+	init(){
+		this.use(plugins.Menu, "top:menu");
 	}
 }
 

@@ -5,7 +5,7 @@ import "../styles/myCss.css";
 class Contacts extends JetView{
 	config(){
 		const usersList = {
-			view:"list", select:"true",
+			view:"list", localId:"usersList", select:"true",
 			maxWidth:350,
 			type:{
 				height:70
@@ -31,9 +31,9 @@ class Contacts extends JetView{
 		
 		};
 	}
-	init(view){
-		view.queryView("list").parse(contactsCollServ);
-		const list = view.queryView("list");
+	init(){
+		const list = this.$$("usersList");
+		list.parse(contactsCollServ);
 		contactsCollServ.waitData.then(()=>{
 			this.show("./ContactInfo?id=" + list.getFirstId());
 			list.select(list.getFirstId());
@@ -42,7 +42,7 @@ class Contacts extends JetView{
 	urlChange(view,url){
 		contactsCollServ.waitData.then(()=>{
 			if(url[1].page === "ContactInfo"){
-				const list = view.queryView("list");
+				const list = this.$$("usersList");
 				let id = this.getParam("id");
 				if(id && list.exists(id))
 					list.select(id);
