@@ -22,11 +22,7 @@ export class PopupWin extends JetView {
 							{view:"datepicker", label:"Time", type:"time", name:"Time", format:webix.Date.dateToStr("%H:%i")}
 						]
 					},
-<<<<<<< HEAD
-					{view:"checkbox", label:"Complited", name:"State"},
-=======
 					{view:"checkbox", label:"Complited", checkValue:"Open", unCheckValue:"Close"},
->>>>>>> Stage1
 					{
 						cols:[
 							{},
