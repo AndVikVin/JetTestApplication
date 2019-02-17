@@ -23,9 +23,25 @@ class Contacts extends JetView{
 				}
 			}
 		};
+		const addButton = {
+			view:"button",
+			type:"iconButton",
+			label:"Add Contact",
+			icon:"fas fa-plus",
+			click:()=>{
+				const list = this.$$("usersList");
+				list.unselectAll();
+				this.show("./contactForm");
+			}
+		};
 		return{
 			cols:[
-				usersList,
+				{
+					rows:[
+						usersList,
+						addButton
+					]
+				},
 				{$subview:true}
 			]
 		
@@ -35,19 +51,9 @@ class Contacts extends JetView{
 		const list = this.$$("usersList");
 		list.parse(contactsCollServ);
 		contactsCollServ.waitData.then(()=>{
+			console.log(list.data.pull)
 			this.show("./ContactInfo?id=" + list.getFirstId());
 			list.select(list.getFirstId());
-		});
-	}
-	urlChange(view,url){
-		contactsCollServ.waitData.then(()=>{
-			if(url[1].page === "ContactInfo"){
-				const list = this.$$("usersList");
-				let id = this.getParam("id");
-				if(id && list.exists(id))
-					list.select(id);
-			}
-			
 		});
 	}
 }
