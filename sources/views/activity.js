@@ -60,10 +60,9 @@ class ActivityTable extends JetView{
 		};
 	}
 	init(){
+		activities.filter();
 		this.PopupWin= this.ui(PopupWin);
-		activities.waitData.then(()=>{
-			this.$$("activityTable").sync(activities);
-		});
+		this.$$("activityTable").sync(activities);
 	}
 }
 

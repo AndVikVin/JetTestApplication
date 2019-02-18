@@ -23,30 +23,36 @@ class Contacts extends JetView{
 				}
 			}
 		};
+		const addButton = {
+			view:"button",
+			type:"iconButton",
+			label:"Add Contact",
+			icon:"fas fa-plus",
+			click:()=>{
+				const list = this.$$("usersList");
+				list.unselectAll();
+				this.show("./contactForm");
+			}
+		};
 		return{
 			cols:[
-				usersList,
+				{
+					rows:[
+						usersList,
+						addButton
+					]
+				},
 				{$subview:true}
 			]
 		
 		};
 	}
-	init(view){
-		view.queryView("list").parse(contactsCollServ);
-		const list = view.queryView("list");
+	init(){
+		const list = this.$$("usersList");
+		list.parse(contactsCollServ);
 		contactsCollServ.waitData.then(()=>{
 			this.show("./ContactInfo?id=" + list.getFirstId());
 			list.select(list.getFirstId());
-		});
-	}
-	urlChange(){
-		contactsCollServ.waitData.then(()=>{
-			const list = this.$$("usersList");
-			let id = this.getParam("id");
-	
-			id = id || list.getFirstId();
-			if(id && list.exists(id))
-				list.select(id);
 		});
 	}
 }
