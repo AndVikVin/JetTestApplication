@@ -4,6 +4,8 @@ import { contactsCollServ } from "../models/contacts";
 
 class ContactForm extends JetView{
 	config(){
+
+
 		const form = {
 			view:"form",
 			localId:"contactForm",
@@ -33,6 +35,45 @@ class ContactForm extends JetView{
 								{view:"text", label:"Skype", name:"Skype"},
 								{view:"text", label:"Phone", name:"Phone"},
 								{view:"datepicker", label:"Birthday", name:"Birthday", format:webix.Date.dateToStr("%d-%m-%Y")},
+								{
+									cols:[
+										{
+											view:"template",
+											localId:"accPict",
+											name:"Photo",
+											template:"<img class='accPict' src='#src#'></img>",
+										},
+										{
+											rows:[
+												{},
+												{ 
+													view:"uploader", 
+													value:"Change photo",
+													localId:"photoUploader",
+													accept:"image/jpeg, image/png",
+													autosend:false, 
+													multiple:false,
+													on:{        
+														onBeforeFileAdd: (upload)=>{      
+															const file = upload.file;
+															const reader = new FileReader();  
+															reader.onload = (event)=>{
+																this.$$("accPict").setValues({src:event.target.result});
+																this.$$("contactForm").setValues({Photo:event.target.result}, true);
+															};           
+															reader.readAsDataURL(file);
+															return false;
+														}
+													}
+												},
+												{view:"button", value:"Delete photo", click:()=>{
+													this.$$("accPict").setValues({src:""});
+													this.$$("contactForm").setValues({Photo:""}, true);
+												}}
+											]
+										}
+									]
+								}
 							]
 						}
 					],
@@ -92,11 +133,13 @@ class ContactForm extends JetView{
 			});
 		}
 	}
+
 	urlChange(){
 		const id = this.getParam("id");
 		contactsCollServ.waitData.then(()=>{
 			const item = contactsCollServ.getItem(id);
 			if(id){
+				this.$$("accPict").setValues({src:item.Photo});
 				this.$$("contactForm").setValues(item);
 				this.$$("addButton").setValue("Save");
 			}
