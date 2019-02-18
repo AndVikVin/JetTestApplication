@@ -55,12 +55,10 @@ class ContactForm extends JetView{
 							const newValues = this.$$("contactForm").getValues();
 							const dateFormatSave =  webix.Date.dateToStr("%d-%m-%Y");
 							newValues.Birthday = dateFormatSave(newValues.Birthday);
-							if(id){
-								if(this.$$("contactForm").validate()){
+							if(this.$$("contactForm").validate()){
+								if(id){
 									contactsCollServ.updateItem(id,newValues);
-								}
-							} else {
-								if(this.$$("contactForm").validate()){
+								} else {
 									contactsCollServ.add(newValues);
 								}
 							}
@@ -88,8 +86,10 @@ class ContactForm extends JetView{
 		if(id){
 			parentView.show("./ContactInfo?id=" + id);
 		} else {
-			const lastAdded = contactsCollServ.getLastId();
-			parentView.show("./ContactInfo?id=" + lastAdded);
+			webix.dp(contactsCollServ).attachEvent("onAfterInsert", function(response){ 
+				const lastAdded = response.id;
+				parentView.show("./ContactInfo?id=" + lastAdded);
+			});
 		}
 	}
 	urlChange(){

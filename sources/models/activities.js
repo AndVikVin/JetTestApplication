@@ -8,6 +8,7 @@ const activities = new webix.DataCollection({
 		$init:(obj)=>{
 			if(typeof(obj.DueDate) === "string")
 				obj.DueDate = dateFormatInit(obj.DueDate);
+				// console.log(obj)
 		},
 		$save:(obj)=>{
 			if (typeof(obj.DueDate) === "object"){

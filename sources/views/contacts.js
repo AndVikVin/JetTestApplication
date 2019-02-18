@@ -51,7 +51,6 @@ class Contacts extends JetView{
 		const list = this.$$("usersList");
 		list.parse(contactsCollServ);
 		contactsCollServ.waitData.then(()=>{
-			console.log(list.data.pull)
 			this.show("./ContactInfo?id=" + list.getFirstId());
 			list.select(list.getFirstId());
 		});
