@@ -22,7 +22,7 @@ export class PopupWin extends JetView {
 							{view:"datepicker", label:"Time", type:"time", name:"Time", format:webix.Date.dateToStr("%H:%i"), invalidMessage:"Can't be empty"}
 						]
 					},
-					{view:"checkbox", label:"Complited", name:"State", checkValue:"Open", unCheckValue:"Close"},
+					{view:"checkbox", label:"Complited", name:"State", checkValue:"Close", unCheckValue:"Open"},
 					{
 						cols:[
 							{},
@@ -38,6 +38,7 @@ export class PopupWin extends JetView {
 									if(this.$$("addButton").getValue() === "Save"){
 										const id = newValues.id;
 										activities.updateItem(id,newValues);
+										this.getParentView().$$("activityTable").filterByAll();
 									} else {
 										activities.add(newValues);
 									}
