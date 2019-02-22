@@ -1,10 +1,11 @@
 import {JetView} from "webix-jet";
-import {contactsCollServ} from "../models/contacts";
+import {contacts} from "../models/contacts";
 import statuses from "../models/statuses";
 import "../styles/myCss.css";
 
 class Contacts extends JetView{
 	config(){
+		const _ = this.app.getService("locale")._;
 		const usersList = {
 			view:"list", localId:"usersList", select:"true",
 			maxWidth:350,
@@ -14,20 +15,14 @@ class Contacts extends JetView{
 			template:"<span class='far fa-user-circle fa-4x'></span>  <span class='contact'>#FirstName# #LastName#<br>#Company#</span>",	
 			on:{
 				onAfterSelect:(id)=>{
-					const currentSubview = this.getSubView();
-					const page = currentSubview.getUrl()[0].page;
-					if(page === "ContactInfo"){
-						currentSubview.setParam("id",id,true);
-					} else {
-						this.show("./ContactInfo?id=" + id);
-					}
-				}
+					this.show("./ContactInfo?id=" + id);
+				},
 			}
 		};
 		const addButton = {
 			view:"button",
 			type:"iconButton",
-			label:"Add Contact",
+			label:_("Add Contact"),
 			icon:"fas fa-plus",
 			click:()=>{
 				const list = this.$$("usersList");
@@ -42,7 +37,7 @@ class Contacts extends JetView{
 				onTimedKeyPress:function(){
 					let value = this.getValue().toLowerCase();
 					const searchParams = ["value", "Company", "Job", "Email", "Skype", "Website", "Address","Status"];
-					contactsCollServ.filter((obj)=>{
+					contacts.filter((obj)=>{
 						for (let i = 0; i < searchParams.length; i++){
 							if(searchParams[i] === "Status"){
 								if(obj.StatusID){
@@ -82,8 +77,23 @@ class Contacts extends JetView{
 	}
 	init(){
 		const list = this.$$("usersList");
-		list.parse(contactsCollServ);
-		contactsCollServ.waitData.then(()=>{
+		this.on(this.app,"showContactForm",()=>{
+			const id = list.getSelectedId();
+			this.show("./contactForm?id=" + id);
+		});
+		this.on(this.app,"showContact",()=>{
+			const id = list.getSelectedId();
+			this.show("./ContactInfo?id=" + id);
+		});
+		this.on(this.app,"showFirstContact",()=>{
+			const id = list.getFirstId();
+			list.select(id);
+		});
+		this.on(webix.dp(contacts),"onAfterInsert",(response)=>{
+			list.select(response.id);
+		});
+		list.sync(contacts);
+		contacts.waitData.then(()=>{
 			this.show("./ContactInfo?id=" + list.getFirstId());
 			list.select(list.getFirstId());
 		});

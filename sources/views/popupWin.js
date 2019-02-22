@@ -1,10 +1,11 @@
 import {JetView} from "webix-jet";
 import {activities} from "../models/activities";
 import {activityType} from "../models/activities";
-import {contactsCollServ} from "../models/contacts";
+import {contacts} from "../models/contacts";
 
 export class PopupWin extends JetView {
 	config(){
+		const _ = this.app.getService("locale")._;
 		return {
 			view:"popup",
 			position:"center", height:600, width:700,
@@ -13,16 +14,16 @@ export class PopupWin extends JetView {
 				localId:"form",
 				elements:[
 					{type:"header", localId:"formHeader", template:"Add activity"},
-					{view:"text", label:"Details", height:100, name:"Details", invalidMessage:"Can't be empty"},
-					{view:"richselect", label:"Type", options:activityType, name:"TypeID", invalidMessage:"Can't be empty"},
-					{view:"richselect", localId:"Contact", label:"Contact", options:contactsCollServ, name:"ContactID", invalidMessage:"Can't be empty"},
+					{view:"text", label:_("Details"), height:100, name:"Details", invalidMessage:"Can't be empty"},
+					{view:"richselect", label:_("Type"), options:activityType, name:"TypeID", invalidMessage:"Can't be empty"},
+					{view:"richselect", localId:"Contact", label:_("Contact"), options:contacts, name:"ContactID", invalidMessage:"Can't be empty"},
 					{
 						cols:[
-							{view:"datepicker", label:"Date", name:"Date", format: webix.Date.dateToStr("%d-%m-%Y"),invalidMessage:"Can't be empty"},
-							{view:"datepicker", label:"Time", type:"time", name:"Time", format:webix.Date.dateToStr("%H:%i"), invalidMessage:"Can't be empty"}
+							{view:"datepicker", label:_("Date"), name:"Date", format: webix.Date.dateToStr("%d-%m-%Y"),invalidMessage:"Can't be empty", bottomPadding:20},
+							{view:"datepicker", label:_("Time"), type:"time", name:"Time", format:webix.Date.dateToStr("%H:%i"), invalidMessage:"Can't be empty",bottomPadding:20}
 						]
 					},
-					{view:"checkbox", label:"Complited", name:"State", checkValue:"Close", unCheckValue:"Open"},
+					{view:"checkbox", label:_("Complited"), labelWidth:110, name:"State", checkValue:"Close", unCheckValue:"Open"},
 					{
 						cols:[
 							{},
@@ -45,7 +46,7 @@ export class PopupWin extends JetView {
 									this.claerAll();
 								}
 							}},
-							{view:"button",label:"Cancel", width:100,click:()=>{
+							{view:"button",label:_("Cancel"), width:100,click:()=>{
 								this.claerAll();
 							}
 							}
@@ -68,25 +69,26 @@ export class PopupWin extends JetView {
 		this.getRoot().hide();
 	}
 	showPopup(obj,action){
+		const _ = this.app.getService("locale")._;
 		if(action){
-			const currentContact = contactsCollServ.getItem(obj);
+			const currentContact = contacts.getItem(obj);
 			this.$$("Contact").setValue(currentContact);
 			this.$$("Contact").disable();
 		}
 		if(obj){
 			if(typeof(obj) === "object"){
-				this.$$("formHeader").setHTML("<div>Edit activity</div>");
-				this.$$("addButton").setValue("Save");
+				this.$$("formHeader").setHTML("<div>"+_("Edit activity") + "</div>");
+				this.$$("addButton").setValue(_("Save"));
 				obj.Date = obj.DueDate;
 				obj.Time = obj.DueDate;
 				this.$$("form").setValues(obj);
 			} else {
-				this.$$("formHeader").setHTML("<div>Add activity</div>");
-				this.$$("addButton").setValue("Add");
+				this.$$("formHeader").setHTML("<div>"+ _("Add activity") + "</div>");
+				this.$$("addButton").setValue(_("Add"));
 			}
 		} else {
-			this.$$("formHeader").setHTML("<div>Add activity</div>");
-			this.$$("addButton").setValue("Add");
+			this.$$("formHeader").setHTML("<div>" + _("Add activity") + "</div>");
+			this.$$("addButton").setValue(_("Add"));
 		}
 		this.getRoot().show();
 	}
