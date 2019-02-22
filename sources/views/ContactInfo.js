@@ -53,7 +53,6 @@ class ContactInfo extends JetView{
 				}
 			}
 		};
-
 		const contactActivity = {
 			view:"tabview",
 			cells:[
@@ -107,7 +106,6 @@ class ContactInfo extends JetView{
 			view:"button",label:_("Edit"), type:"iconButton", height:50, icon:"far fa-edit", width:140, click:()=>{
 				this.app.callEvent("showContactForm");
 			}};
-
 		return {
 			rows:[
 				{
@@ -142,7 +140,6 @@ class ContactInfo extends JetView{
 			const id = this.getParam("id");
 			if(id && contacts.exists(id)){
 				const currentItem = webix.copy(contacts.getItem(id));
-
 				if(currentItem.StatusID){
 					currentItem.Value = statuses.getItem(currentItem.StatusID).Value;
 					currentItem.Value = _(currentItem.Value);

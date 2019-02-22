@@ -1,7 +1,5 @@
 import {JetView} from "webix-jet";
 import {activityType, activities} from "../models/activities";
-// import "../styles/myCss.css";
-
 
 class ActivityTable extends JetView {
 	config(){

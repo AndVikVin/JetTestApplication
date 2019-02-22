@@ -130,9 +130,6 @@ class ContactForm extends JetView{
 		const id = this.getParam("id");
 		contacts.waitData.then(()=>{
 			const item = contacts.getItem(id);
-			if(item.Photo === ""){
-
-			}
 			if(id){
 				this.$$("accPict").setValues({src:item.Photo});
 				this.$$("contactForm").setValues(item);
