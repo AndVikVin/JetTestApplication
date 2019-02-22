@@ -53,7 +53,8 @@ class ActivityTable extends JetView{
 				{id:"overdue", value:_("Overdue")},
 				{id:"month", value:_("This month")},
 				{id:"week", value:_("This week")},
-				{id:"today", value:_("Today")},                
+				{id:"today", value:_("Today")},
+				{id:"tomorrow", value:_("Tomorrow")}                
 			],
 			on:{
 				onChange:()=>{
@@ -124,6 +125,16 @@ class ActivityTable extends JetView{
 							const dateWeek = date.getWeek();
 							const itemWeek = item.DueDate.getWeek();
 							if(dateWeek === itemWeek){
+								return item;
+							}
+						}
+					} else if(filter == "tomorrow") {
+						const itemYear = item.DueDate.getFullYear();
+						if(dateYear === itemYear){
+							const	dateDay = date.getDate();
+							const itemDay = item.DueDate.getDate();
+							const tomorrow = dateDay + 1;
+							if(tomorrow === itemDay){
 								return item;
 							}
 						}

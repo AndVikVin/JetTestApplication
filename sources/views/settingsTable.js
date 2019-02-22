@@ -59,7 +59,6 @@ export default class SettingsTable extends JetView{
 	}
 	init(){
 		this.$$("iconTable").sync(this._contactData);
-		// this.$$("iconTable").parse(this._contactData);
 	}
 }
 
