@@ -142,6 +142,7 @@ class ContactInfo extends JetView{
 			const id = this.getParam("id");
 			if(id && contacts.exists(id)){
 				const currentItem = webix.copy(contacts.getItem(id));
+
 				if(currentItem.StatusID){
 					currentItem.Value = statuses.getItem(currentItem.StatusID).Value;
 					currentItem.Value = _(currentItem.Value);
