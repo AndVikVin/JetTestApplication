@@ -1,6 +1,6 @@
 import {JetView} from "webix-jet";
 import statuses from "../models/statuses";
-import { contactsCollServ } from "../models/contacts";
+import { contacts } from "../models/contacts";
 
 class ContactForm extends JetView{
 	config(){
@@ -83,12 +83,10 @@ class ContactForm extends JetView{
 						{},
 						{view:"button", value:"Cancel",width:100, click:()=>{
 							const id = this.getParam("id");
-							const parentView = this.getParentView();
 							if(id){
 								this.claerAll(id);
 							} else {
-								const firstItem = contactsCollServ.getFirstId();
-								parentView.show("./ContactInfo?id=" + firstItem);
+								this.app.callEvent("showFirstContact");
 							}
 						}},
 						{view:"button",localId:"addButton", value:"Add",width:100, click:()=>{
@@ -98,12 +96,12 @@ class ContactForm extends JetView{
 							newValues.Birthday = dateFormatSave(newValues.Birthday);
 							if(this.$$("contactForm").validate()){
 								if(id){
-									contactsCollServ.updateItem(id,newValues);
+									contacts.updateItem(id,newValues);
 								} else {
-									contactsCollServ.add(newValues);
+									contacts.add(newValues);
 								}
+								this.claerAll(id);
 							}
-							this.claerAll(id);
 						}},								
 					]
 				}
@@ -123,25 +121,22 @@ class ContactForm extends JetView{
 	claerAll(id){
 		this.$$("contactForm").clear();
 		this.$$("contactForm").clearValidation();
-		const parentView = this.getParentView();
 		if(id){
-			parentView.show("./ContactInfo?id=" + id);
-		} else {
-			webix.dp(contactsCollServ).attachEvent("onAfterInsert", function(response){ 
-				const lastAdded = response.id;
-				parentView.show("./ContactInfo?id=" + lastAdded);
-			});
+			this.app.callEvent("showContact");
 		}
 	}
 
 	urlChange(){
 		const id = this.getParam("id");
-		contactsCollServ.waitData.then(()=>{
-			const item = contactsCollServ.getItem(id);
+		contacts.waitData.then(()=>{
+			const item = contacts.getItem(id);
 			if(id){
 				this.$$("accPict").setValues({src:item.Photo});
 				this.$$("contactForm").setValues(item);
 				this.$$("addButton").setValue("Save");
+			} else {
+				this.$$("contactForm").clear();
+				this.$$("accPict").setValues({src:""});
 			}
 		});
 	}

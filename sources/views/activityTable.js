@@ -1,11 +1,10 @@
 import {JetView} from "webix-jet";
-import {contacts} from "../models/contacts";
-import {activities, activityType} from "../models/activities";
-import PopupWin from "./popupWin";
+import {activityType, activities} from "../models/activities";
 
-class ActivityTable extends JetView{
+
+class ActivityTable extends JetView {
 	config(){
-		const activityTable = {
+		return{
 			view:"datatable",
 			localId:"activityTable",
 			columns:[
@@ -13,7 +12,6 @@ class ActivityTable extends JetView{
 				{id:"TypeID",header:["Activity Type", {content:"selectFilter"}], adjust:"data", collection:activityType, sort:"string",fillspace:true},
 				{id:"DueDate",header:["Due Date",{content:"datepickerFilter", inputConfig:{ timepicker:true }}], adjust:"data",format:webix.Date.dateToStr("%d-%m-%Y %H:%i"), sort:"date",fillspace:true},
 				{id:"Details",header:["Details",{content:"textFilter"}], adjust:"data", sort:"string",fillspace:true},
-				{id:"ContactID",header:["Contact",{content:"selectFilter"}], adjust:"data", collection:contacts,sort:"string",fillspace:true},
 				{id:"edit",header:"",template:"{common.editIcon()}"},
 				{id:"trash",header:"",template:"{common.trashIcon()}"}
 			],
@@ -34,36 +32,23 @@ class ActivityTable extends JetView{
 					});
 					return false;
 				},
-				"wxi-pencil":function(e,id){
+				"wxi-pencil":(e,id)=>{
 					const obj = activities.getItem(id);
-					this.$scope.PopupWin.showPopup(obj);
+					this.PopupWin.showPopup(obj, "Edit");
 				}
 			}
 		};
-		
-		const addActivity = {
-			view:"button",
-			type:"form",
-			inputWidth:120,
-			value:"Add activity",
-			align:"right",
-			click:()=>{
-				this.PopupWin.showPopup();
-			}
-		};
-
-		return{
-			rows:[
-				addActivity,
-				activityTable
-			]
-		};
 	}
 	init(){
-		activities.filter();
-		this.PopupWin= this.ui(PopupWin);
 		this.$$("activityTable").sync(activities);
 	}
+	urlChange(){
+		const id = this.getParam("id");
+		activities.filter((obj)=>{
+			return obj.ContactID == id;
+		});
+	}
+
 }
 
 export default ActivityTable;
