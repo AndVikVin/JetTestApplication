@@ -22,3 +22,11 @@
     margin-left:10px;
 }
 
+.buttons {
+    background-color: aqua;
+}
+
+.accPict {
+    max-width:300px;
+    max-height:200px;
+}
