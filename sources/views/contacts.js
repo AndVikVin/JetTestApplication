@@ -94,7 +94,6 @@ class Contacts extends JetView{
 		});
 		list.sync(contacts);
 		contacts.waitData.then(()=>{
-			this.show("./ContactInfo?id=" + list.getFirstId());
 			list.select(list.getFirstId());
 		});
 	}

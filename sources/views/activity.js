@@ -51,6 +51,8 @@ class ActivityTable extends JetView{
 				{id:"all", value:_("All")},
 				{id:"complited", value:_("Complited")},
 				{id:"overdue", value:_("Overdue")},
+				{id:"month", value:_("This month")},
+				{id:"week", value:_("This week")},
 				{id:"today", value:_("Today")},                
 			],
 			on:{
@@ -85,20 +87,45 @@ class ActivityTable extends JetView{
 		activities.filter();
 		this.PopupWin= this.ui(PopupWin);
 		this.$$("activityTable").sync(activities);
+		Date.prototype.getWeek = function() {
+			const dt = new Date(this.getFullYear(),0,1);
+			return Math.ceil((((this - dt) / 86400000) + dt.getDay()+1)/7);
+		};
+		const date = new Date();
+		const dateYear = date.getFullYear();
 		this.$$("activityTable").registerFilter(
 			(this.$$("activityTabBar")),{
 				compare:(value,filter,item)=>{
 					if(filter == "complited"){
 						return item.State == "Close";
 					} else if(filter == "overdue"){
-						const date = new Date();
 						return item.DueDate < date;
 					} else if(filter == "today") {
-						const date = new Date();
-						const	dateDay = date.getDate();
-						const itemDay = item.DueDate.getDate();
-						if(dateDay === itemDay){
-							return item;
+						const itemYear = item.DueDate.getFullYear();
+						if(dateYear === itemYear){
+							const	dateDay = date.getDate();
+							const itemDay = item.DueDate.getDate();
+							if(dateDay === itemDay){
+								return item;
+							}
+						}
+					} else if(filter == "month"){
+						const itemYear = item.DueDate.getFullYear();
+						if(dateYear === itemYear){
+							const	dateMonth = date.getMonth();
+							const itemMonth = item.DueDate.getMonth();
+							if(dateMonth === itemMonth){
+								return item;
+							}
+						}
+					} else if(filter == "week"){
+						const itemYear = item.DueDate.getFullYear();
+						if(dateYear === itemYear){
+							const dateWeek = date.getWeek();
+							const itemWeek = item.DueDate.getWeek();
+							if(dateWeek === itemWeek){
+								return item;
+							}
 						}
 					} else {
 						return item;

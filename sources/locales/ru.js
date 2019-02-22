@@ -57,5 +57,7 @@ export default{
 	"activity type":"тип мероприятия",
 	"status":"статус",
 	"Icon":"Иконка",
-	"Can't be empty":"Поле не может быть пустым"
+	"Can't be empty":"Поле не может быть пустым",
+	"This month":"Этот месяц",
+	"This week":"Эта неделя"
 };

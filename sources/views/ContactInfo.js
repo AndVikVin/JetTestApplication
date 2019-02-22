@@ -25,7 +25,7 @@ class ContactInfo extends JetView{
 			align:"right",
 			inputWidth:300,
 			click:()=>{
-				const id = this.getParentView().$$("usersList").getSelectedId();
+				const id = this.getParam("id");
 				this.PopupWin.showPopup(id,"Add");
 			}
 		};
