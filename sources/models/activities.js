@@ -8,7 +8,6 @@ const activities = new webix.DataCollection({
 		$init:(obj)=>{
 			if(typeof(obj.DueDate) === "string")
 				obj.DueDate = dateFormatInit(obj.DueDate);
-				// console.log(obj)
 		},
 		$save:(obj)=>{
 			if (typeof(obj.DueDate) === "object"){
@@ -20,9 +19,10 @@ const activities = new webix.DataCollection({
 
 const activityType = new webix.DataCollection({
 	url:"http://localhost:8096/api/v1/activitytypes/",
+	save:"rest->http://localhost:8096/api/v1/activitytypes/",
 	scheme:{
-		$init:(obj)=>{
-			obj.value = obj.Value;
+		$change:(obj)=>{
+			obj.value = "<span class='" + obj.Icon + "'></span>" + "<span>  " + obj.Value + "</span>";
 		}
 	}
 });

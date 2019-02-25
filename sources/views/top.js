@@ -3,6 +3,7 @@ import {JetView, plugins} from "webix-jet";
 
 class Top extends JetView{
 	config(){
+		const _ = this.app.getService("locale")._;
 		const menu = {
 			view:"menu", id:"top:menu",
 			name:"menu", 
@@ -11,9 +12,9 @@ class Top extends JetView{
 			width:180, layout:"y", select:true,
 			template:"<span class='webix_icon #icon#'></span> #value# ",
 			data:[
-				{ value:"Contacts", id:"contacts", icon:"wxi-user" },
-				{ value:"Activity", id:"activity",  icon:"wxi-pencil" },
-				{ value:"Settings", id:"settings",  icon:"wxi-alert" }				
+				{ value:_("Contacts"), id:"contacts", icon:"wxi-user" },
+				{ value:_("Activities"), id:"activity",  icon:"wxi-pencil" },
+				{ value:_("Settings"), id:"settings",  icon:"wxi-alert" }				
 			],
 			on:{
 				onAfterSelect:()=>{

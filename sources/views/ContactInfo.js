@@ -10,16 +10,17 @@ import files from "../models/files";
 
 class ContactInfo extends JetView{ 
 	config(){
+		const _ = this.app.getService("locale")._;
 		const detaileInfo = {
 			view:"template",
 			localId:"detaileInfo",
-			template:"<div class='detName'>#FirstName# #LastName#</div> <div class='imgBlock detInfo'><img class='accPict fas fa-user fa-10x' src='#Photo#' ></img><br><span id ='status'> #Value#</span></div><div class='detInfo1 detInfo'><span class='fas fa-envelope'> #Email#</span><br> <span class='fab fa-skype'> #Skype#</span><br>  <span class='fas fa-briefcase'> #Company#</span><br> <span class='fas fa-tag'> #Job#</span> </div><div class='detInfo2 detInfo'><span class='fas fa-birthday-cake'> #Birthday#</span><br> <span class='fas fa-map-marker-alt'> #Address#</span></div>"
+			template:"<div class='detName'>#FirstName# #LastName#</div> <div class='imgBlock detInfo'><img class='accPict fas fa-user fa-10x' src='#Photo#'></img><br><span id ='status'> #Value#</span><span class='#Icon#'></span></div><div class='detInfo1 detInfo'><span class='fas fa-envelope'> #Email#</span><br> <span class='fab fa-skype'> #Skype#</span><br>  <span class='fas fa-briefcase'> #Company#</span><br> <span class='fas fa-tag'> #Job#</span> </div><div class='detInfo2 detInfo'><span class='fas fa-birthday-cake'> #Birthday#</span><br> <span class='fas fa-map-marker-alt'> #Address#</span></div>"
 		};
 
 		const addActivity = {
 			view:"button",
 			type:"iconButton",
-			label:"Add Activity",
+			label:_("Add activity"),
 			icon:"fas fa-plus",
 			align:"right",
 			inputWidth:300,
@@ -31,7 +32,7 @@ class ContactInfo extends JetView{
 
 		const addFiles = {
 			view:"uploader", 
-			value:"Uppload file",
+			value:_("Uppload file"),
 			localId:"fileUploader",
 			inputWidth:250,
 			align:"center",
@@ -52,12 +53,11 @@ class ContactInfo extends JetView{
 				}
 			}
 		};
-		
 		const contactActivity = {
 			view:"tabview",
 			cells:[
 				{
-					header:"Activities",
+					header:_("Activities"),
 					body:{
 						rows:[
 							ActivityTable,
@@ -66,7 +66,7 @@ class ContactInfo extends JetView{
 					}
 				},
 				{
-					header:"Files",
+					header:_("Files"),
 					body:{
 						rows:[
 							FilesTable,
@@ -78,7 +78,7 @@ class ContactInfo extends JetView{
 		};
 
 		const deleteButton = {
-			view:"button",label:"Delete", type:"iconButton", icon:"far fa-trash-alt", width:140, click:()=>{
+			view:"button",label:_("Delete"), type:"iconButton", icon:"far fa-trash-alt", width:140, click:()=>{
 				const id = this.getParam("id");
 				const activitiesId = [];
 				activities.find((obj)=>{
@@ -87,10 +87,10 @@ class ContactInfo extends JetView{
 					}
 				});
 				webix.confirm({
-					title:"Delete Contact",
-					ok:"Yes",
-					cancel:"No",
-					text:"Are you shure you whant to delete this contact?",
+					title:_("Delete Contact"),
+					ok:_("Yes"),
+					cancel:_("No"),
+					text:_("Are you shure you whant to delete this contact?"),
 					type:"confirm-warning",
 					callback:(result)=>{
 						if(result === true){
@@ -102,9 +102,8 @@ class ContactInfo extends JetView{
 					}
 				});
 			}};
-
 		const editButton = {
-			view:"button",label:"Edit", type:"iconButton", height:50, icon:"far fa-edit", width:140, click:()=>{
+			view:"button",label:_("Edit"), type:"iconButton", height:50, icon:"far fa-edit", width:140, click:()=>{
 				this.app.callEvent("showContactForm");
 			}};
 		return {
@@ -130,8 +129,10 @@ class ContactInfo extends JetView{
 	init(){
 		this.PopupWin= this.ui(PopupWin);
 		files.filter();
+
 	}
 	urlChange(){
+		const _ = this.app.getService("locale")._;
 		webix.promise.all([
 			contacts.waitData,
 			statuses.waitData
@@ -141,8 +142,10 @@ class ContactInfo extends JetView{
 				const currentItem = webix.copy(contacts.getItem(id));
 				if(currentItem.StatusID){
 					currentItem.Value = statuses.getItem(currentItem.StatusID).Value;
+					currentItem.Value = _(currentItem.Value);
+					currentItem.Icon = statuses.getItem(currentItem.StatusID).Icon;
 				} else {
-					currentItem.Value = "Not specified";
+					currentItem.Value = _("Not specified");
 				}
 				this.$$("detaileInfo").parse(currentItem);
 			}

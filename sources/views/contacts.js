@@ -1,9 +1,11 @@
 import {JetView} from "webix-jet";
 import {contacts} from "../models/contacts";
+import statuses from "../models/statuses";
 import "../styles/myCss.css";
 
 class Contacts extends JetView{
 	config(){
+		const _ = this.app.getService("locale")._;
 		const usersList = {
 			view:"list", localId:"usersList", select:"true",
 			maxWidth:350,
@@ -20,7 +22,7 @@ class Contacts extends JetView{
 		const addButton = {
 			view:"button",
 			type:"iconButton",
-			label:"Add Contact",
+			label:_("Add Contact"),
 			icon:"fas fa-plus",
 			click:()=>{
 				const list = this.$$("usersList");
@@ -28,10 +30,42 @@ class Contacts extends JetView{
 				this.show("./contactForm");
 			}
 		};
+		const filterContact  = {
+			view:"text",
+			keyPressTimeout:1000,
+			on: {
+				onTimedKeyPress:function(){
+					let value = this.getValue().toLowerCase();
+					const searchParams = ["value", "Company", "Job", "Email", "Skype", "Website", "Address","Status"];
+					contacts.filter((obj)=>{
+						for (let i = 0; i < searchParams.length; i++){
+							if(searchParams[i] === "Status"){
+								if(obj.StatusID){
+									const status = statuses.getItem(obj.StatusID);
+									obj.Status = status.Value;
+									if(obj[searchParams[i]].toLowerCase().indexOf(value)!=-1){
+										return obj;
+									}
+								}
+							} else {
+								if(obj[searchParams[i]].toLowerCase().indexOf(value)!=-1){	
+									return obj;
+								}
+							}
+						}
+					});
+					const list = this.$scope.$$("usersList");
+					const first = list.getFirstId();
+					list.unselectAll();
+					list.select(first);
+				}
+			}
+		};
 		return{
 			cols:[
 				{
 					rows:[
+						filterContact,
 						usersList,
 						addButton
 					]

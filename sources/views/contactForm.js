@@ -4,8 +4,7 @@ import { contacts } from "../models/contacts";
 
 class ContactForm extends JetView{
 	config(){
-
-
+		const _ = this.app.getService("locale")._;
 		const form = {
 			view:"form",
 			localId:"contactForm",
@@ -19,36 +18,42 @@ class ContactForm extends JetView{
 					cols:[
 						{
 							rows:[
-								{view:"text", label:"First name", name:"FirstName", invalidMessage:"Can't be empty"},
-								{view:"text", label:"Last name", name:"LastName", invalidMessage:"Can't be empty"},
-								{view:"datepicker", label:"Joining date", name:"StartDate"},
-								{view:"richselect", label:"Status", options:statuses, name:"StatusID"},
-								{view:"text", label:"Job", name:"Job"},
-								{view:"text", label:"Company", name:"Company"},
-								{view:"text", label:"Website", name:"Website"},
-								{view:"text", label:"Address", name:"Address"},								
+								{view:"text", label:_("First name"), name:"FirstName", invalidMessage:_("Can't be empty")},
+								{view:"text", label:_("Last name"), name:"LastName", invalidMessage:_("Can't be empty")},
+								{view:"datepicker", label:_("Joining date"), name:"StartDate"},
+								{view:"richselect", label:_("Status"), options:{
+									view:"suggest", body:{
+										view:"list", 
+										data:statuses,
+										template:"<span class='#Icon#'></span><span>  #Value#</span>",
+									}
+								}, name:"StatusID"},
+								{view:"text", label:_("Job"), name:"Job"},
+								{view:"text", label:_("Company"), name:"Company"},
+								{view:"text", label:_("Website"), name:"Website"},
+								{view:"text", label:_("Address"), name:"Address"},								
 							],
 						},
 						{
 							rows:[
 								{view:"text", label:"Email", name:"Email"},
 								{view:"text", label:"Skype", name:"Skype"},
-								{view:"text", label:"Phone", name:"Phone"},
-								{view:"datepicker", label:"Birthday", name:"Birthday", format:webix.Date.dateToStr("%d-%m-%Y")},
+								{view:"text", label:_("Phone"), name:"Phone"},
+								{view:"datepicker", label:_("Birthday"), name:"Birthday", format:webix.Date.dateToStr("%d-%m-%Y")},
 								{
 									cols:[
 										{
 											view:"template",
 											localId:"accPict",
 											name:"Photo",
-											template:"<img class='accPict' src='#src#'></img>",
+											template:"<img class='accPict fas fa-user fa-10x' src='#src#'></img>",
 										},
 										{
 											rows:[
 												{},
 												{ 
 													view:"uploader", 
-													value:"Change photo",
+													value:_("Change photo"),
 													localId:"photoUploader",
 													accept:"image/jpeg, image/png",
 													autosend:false, 
@@ -66,7 +71,7 @@ class ContactForm extends JetView{
 														}
 													}
 												},
-												{view:"button", value:"Delete photo", click:()=>{
+												{view:"button", value:_("Delete photo"), click:()=>{
 													this.$$("accPict").setValues({src:""});
 													this.$$("contactForm").setValues({Photo:""}, true);
 												}}
@@ -81,7 +86,7 @@ class ContactForm extends JetView{
 				{
 					cols:[
 						{},
-						{view:"button", value:"Cancel",width:100, click:()=>{
+						{view:"button", value:_("Cancel"),width:100, click:()=>{
 							const id = this.getParam("id");
 							if(id){
 								this.claerAll(id);
@@ -89,7 +94,7 @@ class ContactForm extends JetView{
 								this.app.callEvent("showFirstContact");
 							}
 						}},
-						{view:"button",localId:"addButton", value:"Add",width:100, click:()=>{
+						{view:"button",localId:"addButton", value:_("Add"),width:100, click:()=>{
 							const id = this.getParam("id");
 							const newValues = this.$$("contactForm").getValues();
 							const dateFormatSave =  webix.Date.dateToStr("%d-%m-%Y");
@@ -127,13 +132,14 @@ class ContactForm extends JetView{
 	}
 
 	urlChange(){
+		const _ = this.app.getService("locale")._;
 		const id = this.getParam("id");
 		contacts.waitData.then(()=>{
 			const item = contacts.getItem(id);
 			if(id){
 				this.$$("accPict").setValues({src:item.Photo});
 				this.$$("contactForm").setValues(item);
-				this.$$("addButton").setValue("Save");
+				this.$$("addButton").setValue(_("Save"));
 			} else {
 				this.$$("contactForm").clear();
 				this.$$("accPict").setValues({src:""});
