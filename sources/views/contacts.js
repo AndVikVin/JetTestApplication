@@ -16,7 +16,7 @@ class Contacts extends JetView{
 			on:{
 				onAfterSelect:(id)=>{
 					this.show("./ContactInfo?id=" + id);
-				},
+				}
 			}
 		};
 		const addButton = {
