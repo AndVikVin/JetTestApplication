@@ -14,7 +14,7 @@ class ContactInfo extends JetView{
 		const detaileInfo = {
 			view:"template",
 			localId:"detaileInfo",
-			template:"<div class='detName'>#FirstName# #LastName#</div> <div class='imgBlock detInfo'><img class='accPict fas fa-user fa-10x' src='#Photo#'></img><br><span id ='status'> #Value#</span></div><div class='detInfo1 detInfo'><span class='fas fa-envelope'> #Email#</span><br> <span class='fab fa-skype'> #Skype#</span><br>  <span class='fas fa-briefcase'> #Company#</span><br> <span class='fas fa-tag'> #Job#</span> </div><div class='detInfo2 detInfo'><span class='fas fa-birthday-cake'> #Birthday#</span><br> <span class='fas fa-map-marker-alt'> #Address#</span></div>"
+			template:"<div class='detName'>#FirstName# #LastName#</div> <div class='imgBlock detInfo'><img class='accPict fas fa-user fa-10x' src='#Photo#'></img><br><span id ='status'> #Value#</span><span class='#Icon#'></span></div><div class='detInfo1 detInfo'><span class='fas fa-envelope'> #Email#</span><br> <span class='fab fa-skype'> #Skype#</span><br>  <span class='fas fa-briefcase'> #Company#</span><br> <span class='fas fa-tag'> #Job#</span> </div><div class='detInfo2 detInfo'><span class='fas fa-birthday-cake'> #Birthday#</span><br> <span class='fas fa-map-marker-alt'> #Address#</span></div>"
 		};
 
 		const addActivity = {
@@ -146,6 +146,7 @@ class ContactInfo extends JetView{
 				if(currentItem.StatusID){
 					currentItem.Value = statuses.getItem(currentItem.StatusID).Value;
 					currentItem.Value = _(currentItem.Value);
+					currentItem.Icon = statuses.getItem(currentItem.StatusID).Icon;
 				} else {
 					currentItem.Value = _("Not specified");
 				}

@@ -22,11 +22,8 @@ const activityType = new webix.DataCollection({
 	save:"rest->http://localhost:8096/api/v1/activitytypes/",
 	scheme:{
 		$change:(obj)=>{
-			obj.value = obj.Value;
-		},
-		$save:(obj)=>{
-			obj.Value = obj.value;
-		},
+			obj.value = "<span class='" + obj.Icon + "'></span>" + "<span>  " + obj.Value + "</span>";
+		}
 	}
 });
 

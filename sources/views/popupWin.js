@@ -15,7 +15,13 @@ export class PopupWin extends JetView {
 				elements:[
 					{type:"header", localId:"formHeader", template:"Add activity"},
 					{view:"text", label:_("Details"), height:100, name:"Details", invalidMessage:"Can't be empty"},
-					{view:"richselect", label:_("Type"), options:activityType, name:"TypeID", invalidMessage:"Can't be empty"},
+					{view:"richselect", label:_("Type"), options:{
+						view:"suggest", body:{
+							view:"list", 
+							data:activityType,
+							template:"<span class='#Icon#'></span><span>  #Value#</span>",
+						}
+					}, name:"TypeID", invalidMessage:"Can't be empty"},
 					{view:"richselect", localId:"Contact", label:_("Contact"), options:contacts, name:"ContactID", invalidMessage:"Can't be empty"},
 					{
 						cols:[
@@ -36,10 +42,10 @@ export class PopupWin extends JetView {
 									delete newValues.Time;
 								}
 								if(this.$$("form").validate()){
-									if(this.$$("addButton").getValue() === "Save"){
+									if(this.$$("addButton").getValue() == _("Save")){
 										const id = newValues.id;
 										activities.updateItem(id,newValues);
-										this.getParentView().$$("activityTable").filterByAll();
+										this.app.callEvent("filterActivityTable");
 									} else {
 										activities.add(newValues);
 									}

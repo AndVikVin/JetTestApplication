@@ -21,7 +21,13 @@ class ContactForm extends JetView{
 								{view:"text", label:_("First name"), name:"FirstName", invalidMessage:_("Can't be empty")},
 								{view:"text", label:_("Last name"), name:"LastName", invalidMessage:_("Can't be empty")},
 								{view:"datepicker", label:_("Joining date"), name:"StartDate"},
-								{view:"richselect", label:_("Status"), options:statuses, name:"StatusID"},
+								{view:"richselect", label:_("Status"), options:{
+									view:"suggest", body:{
+										view:"list", 
+										data:statuses,
+										template:"<span class='#Icon#'></span><span>  #Value#</span>",
+									}
+								}, name:"StatusID"},
 								{view:"text", label:_("Job"), name:"Job"},
 								{view:"text", label:_("Company"), name:"Company"},
 								{view:"text", label:_("Website"), name:"Website"},
